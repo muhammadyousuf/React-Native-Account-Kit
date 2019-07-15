@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -23,92 +23,42 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
+import RNAccountKit from 'react-native-facebook-account-kit'
 const App = () => {
+  RNAccountKit.configure({
+    responseType: 'code', // 'token' by default,
+    // titleType: 'login',
+    // initialAuthState: '',
+    // initialEmail: 'some.initial@email.com',
+    initialPhoneCountryPrefix: '+92', // autodetected if none is provided
+    // initialPhoneNumber: '123-456-7890',
+    // facebookNotificationsEnabled: true|false, // true by default
+    // readPhoneStateEnabled: true|false, // true by default,
+    // countryWhitelist: ['AR'], // [] by default
+    // countryBlacklist: ['US'], // [] by default
+    defaultCountry: 'PK',
+    // theme: {
+    //   // for iOS only, see the Theme section
+    // },
+    // viewControllerMode: 'show'|'present', // for iOS only, 'present' by default
+    // getACallEnabled: true|false,
+    // setEnableInitialSmsButton: true|false, // true by default
+  })
+
+  // Shows the Facebook Account Kit view for login via SMS
+  RNAccountKit.loginWithPhone()
+    .then((token) => {
+      if (!token) {
+        console.log('Login cancelled')
+      } else {
+        console.log(`Logged with phone. Token: ${token}`)
+      }
+    })
   return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Fragment>
+    <View>
+      Login Suceessfull
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
